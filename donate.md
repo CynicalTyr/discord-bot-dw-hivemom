@@ -12,15 +12,14 @@ Thank you for keeping independent projects alive.
 
 ### Cash App
 Send directly to **$MooseMeNow**  
-[Open Cash App][cashapp]
+[Donate with Cash App][cashapp]
 
 ### PayPal
-Send directly to **MooseMeNow** 
-[Open PayPal][paypal]
+[Donate with PayPal][paypal]
 
 ### Venmo
 Send directly to **@MooseMeNow**  
-[Open Venmo][venmo]
+[Donate with Venmo][venmo]
 
 
 [cashapp]: https://cash.app/$MooseMeNow
