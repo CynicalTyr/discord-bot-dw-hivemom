@@ -22,9 +22,9 @@ intents.presences = True
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")  # Using environment variable
 GUILD_ID = os.getenv("GUILD_ID")  # Using environment variable
 LAST_SEEN_FILE = "last_seen.txt"
-ANNOUNCEMENT_CHANNEL_NAME = "look-who-joined" # You can set these in .env or config
-PUBLIC_CHAT_CHANNEL_NAME = "game-discussion"
-BOT_CHAT_CHANNEL_NAME = "bot-spam"
+ANNOUNCEMENT_CHANNEL_NAME = os.getenv("ANNOUNCEMENT_CHANNEL", "updates") # Generic channel name
+PUBLIC_CHAT_CHANNEL_NAME = os.getenv("GAME_CHAT_CHANNEL", "game-chat")
+BOT_CHAT_CHANNEL_NAME = os.getenv("BOT_SPAM_CHANNEL", "bot-spam")
 MUTE_ROLE_NAME = "Punishment Role"
 
 # Logging
@@ -155,7 +155,7 @@ async def reset_reminder():
                 channel = discord.utils.get(guild.text_channels, name=ANNOUNCEMENT_CHANNEL_NAME)
                 if channel and channel.permissions_for(guild.me).send_messages:
                     await channel.send(
-                        "🕛 5 minutes until **DW Reset!**\n"
+                        "🕛 5 minutes until **Daily Reset!**\n"
                         "✅ Sign into the game now to receive your daily rewards and participate in new events!\n"
                         "🎯 New tasks and events have begun.\n"
                         "📦 Be sure to check the Events tab and Alliance Missions!"
@@ -286,7 +286,7 @@ async def slash_vsschedule(interaction: discord.Interaction):
         "🚚>> **S-tier Escort/Cargo Trucks** – Do S-tier for points. \n"
         "🕶>> **S-tier (orange) Shadow Calls Missions** – Prioritize orange missions for massive point boosts. \n"
         "⚙️>> **Speedups** – Troops, Construction and Research. Start saving if you can get away with it. \n"
-        "🎯>> **Defeat Enemies** – PvP non-alliance in state 161 and any cross-server invaders. \n"
+        "🎯>> **Defeat Enemies** – PvP in your state and any cross-server invaders. \n"
         "💀>> **Units Lost** – Sacrifices during battles or rallies contribute here (plan wisely).\n"
         "💡 **Pro Tip** 💡: If you do not plan on participating **SHIELD** and send out trucks for Truck-4-Truck to rack up passive points.\n",
         ephemeral=False
@@ -385,7 +385,7 @@ async def slash_vs6(interaction: discord.Interaction):
         "🚚>> **S-tier Escort/Cargo Trucks** – Do S-tier for points. \n"
         "🕶>> **S-tier (orange) Shadow Calls Missions** – Prioritize orange missions for massive point boosts. \n"
         "⚙️>> **Speedups** – Troops, Construction and Research. Start saving if you can get away with it. \n"
-        "🎯>> **Defeat Enemies** – PvP non-alliance in state 161 and any cross-server invaders. \n"
+        "🎯>> **Defeat Enemies** – PvP in your state and any cross-server invaders. \n"
         "💀>> **Units Lost** – Sacrifices during battles or rallies contribute here (plan wisely).\n"
         "💡 **Pro Tip** 💡: If you do not plan on participating **SHIELD** and send out trucks for Truck-4-Truck to rack up passive points.\n",
         ephemeral=False
@@ -769,9 +769,6 @@ async def slash_teamup(interaction: discord.Interaction):
         ephemeral=True
     )
 
-@bot.tree.command(name="ranking", description="View YYMM Alliance rank structure and promotion criteria.")
-async def slash_ranking(interaction: discord.Interaction):
-    await interaction.response.send_message(
         "**:military_helmet: Alliance Rank Structure & Promotions**\n"
         "_All ranks are earned through strength, loyalty, contribution, and spirit._\n"
         "**Meritocracy-based. Effort and teamwork matter most.**\n\n"
