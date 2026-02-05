@@ -10,15 +10,15 @@ Thank you for keeping independent projects alive.
 
 ## Direct Support Options
 
-### Cash App
-Send directly to **$MooseMeNow**  
-[Donate with Cash App][cashapp]
-
 ### PayPal
 [Donate with PayPal][paypal]
 
+### Cash App
+direct to **$MooseMeNow**  
+[Donate with Cash App][cashapp]
+
 ### Venmo
-Send directly to **@MooseMeNow**  
+direct to **@MooseMeNow**  
 [Donate with Venmo][venmo]
 
 
