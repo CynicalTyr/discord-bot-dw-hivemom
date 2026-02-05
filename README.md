@@ -1,8 +1,8 @@
 ﻿# HiveMom Bot: Dark War Survival Assistant
 
-This repository contains the full source code and deployment configuration for the HiveMom Discord bot, specifically tailored for Dark War: Survival (Discord DWSI https://discord.com/channels/1321252815515156620/).
+This repository contains the full source code and deployment configuration for the HiveMom Discord bot, specifically tailored for Dark War: Survival (DWSI - https://discord.com/channels/1321252815515156620/).
 
-##  Identified Tasks (TODO)
+## Identified Tasks (TODO)
 
 The following items should be addressed by the new maintainer:
 
@@ -12,14 +12,16 @@ The following items should be addressed by the new maintainer:
 
 ---
 
-##  Setup & Deployment Instructions (Linux)
+## Setup & Deployment Instructions (Linux)
 
-###  Prerequisites
+### Prerequisites
+
 - **Python 3.11+**
 - **Docker & Docker Compose**
 - **Discord Bot Token**: Ensure \SERVER MEMBERS\, \PRESENCE\, and \MESSAGE CONTENT\ intents are enabled in the [Discord Developer Portal](https://discord.com/developers/applications).
 
-###  Environment Configuration
+### Environment Configuration
+
 Create a \.env\ file in the root directory:
 \\\env
 DISCORD_BOT_TOKEN=your_token_here
@@ -28,16 +30,21 @@ DISCORD_WEBHOOK_URL=your_webhook_url
 ADMIN_ROLES=R5 & R4,R5,R4,Admin,admin,R5/R4
 \\\
 
-###  Deploying with Docker
+### Deploying with Docker
+
 \\\ash
+
 # Build and start the container
+
 docker compose up -d --build
 
 # Monitor bot logs
+
 docker compose logs -f
 \\\
 
-###  Manual Deployment (No Docker)
+### Manual Deployment (No Docker)
+
 \\\ash
 pip install -r requirements.txt
 python dwbot.py
@@ -45,11 +52,11 @@ python dwbot.py
 
 ---
 
-##  File Manifest
+## File Manifest
+
 - \dwbot.py\: Main logic & slash commands.
 - \
-equirements.txt\: Python dependencies.
+  equirements.txt\: Python dependencies.
 - \docker-compose.yml\ & \Dockerfile\: Containerization setup.
 - \last_seen.txt\: Internal state tracking.
 - \data/\: Local storage for persistence.
-
