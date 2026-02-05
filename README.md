@@ -12,8 +12,6 @@ Future updates:
 - **Unified Roles**: Standardize admin role checks across the bot using the \ADMIN_ROLES\ environment variable.
 
 ---
-# HiveMom Bot: Dark War Survival Assistant
-
 HiveMom is a specialized Discord bot designed to assist "Dark War: Survival" communities with event schedules, daily task reminders, and server moderation.
 
 This bot was originally created for the **DWSI community server** ([Visit DWSI](https://discord.com/channels/1321252815515156620)). It is now available as a template for other server owners to deploy for their own Alliances.
