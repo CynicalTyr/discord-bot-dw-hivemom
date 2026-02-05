@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  s161-bot:
+    build: .
+    container_name: dwsi-hivemom-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+      - ./data:/app/data
+    working_dir: /app
+    tty: false
+    stdin_open: false
