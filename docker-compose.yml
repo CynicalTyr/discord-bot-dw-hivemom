@@ -1,15 +1,15 @@
 version: '3.8'
 
 services:
-  s161-bot:
+  Your-DW-bot: # change to name it whatever you want
     build: .
-    container_name: dwsi-hivemom-bot
+    container_name: dwsi-hivemom-bot # change to whatever you want
     restart: unless-stopped
     env_file:
       - .env
     volumes:
-      - ./:/app
-      - ./data:/app/data
+      - ./:/app  # ( './' is just a root suggestion - this can be any path you choose)
+      - ./data:/app/data # ('./' is just a root suggestion - this can be any path you choose)
     working_dir: /app
     tty: false
     stdin_open: false
