@@ -1,6 +1,6 @@
 ﻿# HiveMom Bot: Dark War Survival Assistant
 
-This repository contains the full source code and deployment configuration for the HiveMom Discord bot, specifically tailored for Dark War: Survival (State 161).
+This repository contains the full source code and deployment configuration for the HiveMom Discord bot, specifically tailored for Dark War: Survival (Discord DWSI https://discord.com/channels/1321252815515156620/).
 
 ##  Identified Tasks (TODO)
 
@@ -47,7 +47,9 @@ python dwbot.py
 
 ##  File Manifest
 - \dwbot.py\: Main logic & slash commands.
-- \equirements.txt\: Python dependencies.
+- \
+equirements.txt\: Python dependencies.
 - \docker-compose.yml\ & \Dockerfile\: Containerization setup.
 - \last_seen.txt\: Internal state tracking.
 - \data/\: Local storage for persistence.
+
