@@ -90,6 +90,7 @@ python dwbot.py
 - `requirements.txt`: Python libraries required.
 - `docker-compose.yml` & `Dockerfile`: Environment containerization.
 - `data/`: Local directory for database/state persistence.
+- `.env`: where you add your variables and sensitive information (see example above)
 
 ---
 
