@@ -4,11 +4,12 @@ This repository contains the full source code and deployment configuration for t
 
 ## Identified Tasks (TODO)
 
-The following items should be addressed by the new maintainer:
+The following are latest updates:
+-  **Fixed Orphaned Logic**: Moved the welcome DM block (lines 169-183) into a proper \on_member_join\ event handler.
 
-1.  **Fix Orphaned Logic**: Move the welcome DM block (lines 169-183) into a proper \on_member_join\ event handler.
-2.  **Rich Embeds**: Upgrade guide commands (\/vsduel\, \/alliancetech\, etc.) to use \discord.Embed\ messages.
-3.  **Unified Roles**: Standardize admin role checks across the bot using the \ADMIN_ROLES\ environment variable.
+Future updates:
+-  **Rich Embeds**: Upgrade guide commands (\/vsduel\, \/alliancetech\, etc.) to use \discord.Embed\ messages.
+- **Unified Roles**: Standardize admin role checks across the bot using the \ADMIN_ROLES\ environment variable.
 
 ---
 
@@ -32,7 +33,7 @@ ADMIN_ROLES=R5 & R4,R5,R4,Admin,admin,R5/R4
 
 ### Deploying with Docker
 
-\\\ash
+\\\Bash
 
 # Build and start the container
 
@@ -45,7 +46,7 @@ docker compose logs -f
 
 ### Manual Deployment (No Docker)
 
-\\\ash
+\\\Bash
 pip install -r requirements.txt
 python dwbot.py
 \\\
