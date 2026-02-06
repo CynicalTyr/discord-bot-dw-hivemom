@@ -1,4 +1,5 @@
 ﻿# HiveMom Bot: Dark War Survival Assistant
+HiveMom Bot is a specialized tool designed to mitigate the administrative overhead of running a Dark War: Survival alliance. It handles the repetitive logic of event scheduling and daily resets, allowing leadership to focus on strategy rather than calendar management.
 
 This repository contains the full source code and deployment configuration for the HiveMom Discord bot, specifically tailored for Dark War: Survival (DWSI - https://discord.com/channels/1321252815515156620/).
 
