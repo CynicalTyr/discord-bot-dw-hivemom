@@ -97,4 +97,4 @@ python dwbot.py
 ## 🛡️ Credits & Support
 
 Developed for the **Dark War: Survival** community.
-Special thanks to the **DWSI** team and my original State #161 for the original concept and idea.
+Special thanks to the **DWSI** team and my original State #161 for the original concept and idea. I have personally moved onto other projects but still happy to help if anyone has questions 
