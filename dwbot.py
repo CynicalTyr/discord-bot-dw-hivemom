@@ -9,6 +9,7 @@ import logging
 from discord import app_commands, Intents, Permissions
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
+from zoneinfo import ZoneInfo
 
 load_dotenv()
 
@@ -22,10 +23,66 @@ intents.presences = True
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")  # Using environment variable
 GUILD_ID = os.getenv("GUILD_ID")  # Using environment variable
 LAST_SEEN_FILE = "last_seen.txt"
-ANNOUNCEMENT_CHANNEL_NAME = os.getenv("ANNOUNCEMENT_CHANNEL", "updates") # Generic channel name
-PUBLIC_CHAT_CHANNEL_NAME = os.getenv("GAME_CHAT_CHANNEL", "game-chat")
-BOT_CHAT_CHANNEL_NAME = os.getenv("BOT_SPAM_CHANNEL", "bot-spam")
+ANNOUNCEMENT_CHANNEL_NAME = "look-who-joined" # You can set these in .env or config
+PUBLIC_CHAT_CHANNEL_NAME = "game-discussion"
+BOT_CHAT_CHANNEL_NAME = "bot-spam"
 MUTE_ROLE_NAME = "Punishment Role"
+
+SERVER_OFFSET_FROM_UTC = int(os.getenv("SERVER_OFFSET_FROM_UTC", "-2"))
+
+TZ_MAP = {
+    "SERVER": "SERVER",
+    "UTC": "UTC",
+    "US/Eastern": "America/New_York",
+    "US/Central": "America/Chicago",
+    "US/Mountain": "America/Denver",
+    "US/Pacific": "America/Los_Angeles",
+    "UK/London": "Europe/London",
+    "EU/Central": "Europe/Berlin",
+    "Gulf (Dubai)": "Asia/Dubai",
+    "India (IST)": "Asia/Kolkata",
+    "China (CST)": "Asia/Shanghai",
+    "Japan (JST)": "Asia/Tokyo",
+    "Australia/Sydney": "Australia/Sydney",
+}
+
+def _now_utc() -> datetime.datetime:
+    return datetime.datetime.now(datetime.timezone.utc)
+
+
+def _server_tzinfo() -> datetime.tzinfo:
+    return datetime.timezone(
+        datetime.timedelta(hours=SERVER_OFFSET_FROM_UTC),
+        name=f"SERVER(UTC{SERVER_OFFSET_FROM_UTC:+d})"
+    )
+
+
+def _server_now_exact() -> datetime.datetime:
+    return datetime.datetime.now(datetime.timezone.utc).astimezone(_server_tzinfo())
+
+
+def _next_server_midnight(now_server: datetime.datetime) -> datetime.datetime:
+    local = now_server.astimezone(_server_tzinfo())
+    midnight_today = local.replace(hour=0, minute=0, second=0, microsecond=0)
+    if local < midnight_today:
+        return midnight_today
+    return midnight_today + datetime.timedelta(days=1)
+
+
+def _tzinfo_for(label: str) -> datetime.tzinfo:
+    if label == "UTC":
+        return datetime.timezone.utc
+    if label == "SERVER":
+        return _server_tzinfo()
+    return ZoneInfo(TZ_MAP[label])
+
+
+def _display_label(label: str) -> str:
+    if label == "SERVER":
+        return "⏱️ Dark War Server"
+    if label == "UTC":
+        return "🌐 UTC"
+    return label
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -98,11 +155,17 @@ def is_admin():
 
 @bot.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+    async def _safe_reply(message: str):
+        if interaction.response.is_done():
+            await interaction.followup.send(message, ephemeral=True)
+        else:
+            await interaction.response.send_message(message, ephemeral=True)
+
     if isinstance(error, app_commands.CheckFailure):
-        await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
+        await _safe_reply("❌ You do not have permission to use this command.")
     else:
         logger.exception(f"App command error: {error}") # Log the full exception
-        await interaction.response.send_message("❌ An error occurred while processing the command.", ephemeral=True)
+        await _safe_reply("❌ An error occurred while processing the command.")
 
 # Scheduled tasks
 @tasks.loop(minutes=1)
@@ -155,7 +218,7 @@ async def reset_reminder():
                 channel = discord.utils.get(guild.text_channels, name=ANNOUNCEMENT_CHANNEL_NAME)
                 if channel and channel.permissions_for(guild.me).send_messages:
                     await channel.send(
-                        "🕛 5 minutes until **Daily Reset!**\n"
+                        "🕛 5 minutes until **DW Reset!**\n"
                         "✅ Sign into the game now to receive your daily rewards and participate in new events!\n"
                         "🎯 New tasks and events have begun.\n"
                         "📦 Be sure to check the Events tab and Alliance Missions!"
@@ -166,8 +229,6 @@ async def reset_reminder():
         logger.error(f"❌ Error in reset_reminder: {e}")
 
 
-@bot.event
-async def on_member_join(member):
     # Private welcome DM
     welcome_dm = (
         f"👋 Welcome to the Discord server, {member.name}!\n\n"
@@ -286,7 +347,7 @@ async def slash_vsschedule(interaction: discord.Interaction):
         "🚚>> **S-tier Escort/Cargo Trucks** – Do S-tier for points. \n"
         "🕶>> **S-tier (orange) Shadow Calls Missions** – Prioritize orange missions for massive point boosts. \n"
         "⚙️>> **Speedups** – Troops, Construction and Research. Start saving if you can get away with it. \n"
-        "🎯>> **Defeat Enemies** – PvP in your state and any cross-server invaders. \n"
+        "🎯>> **Defeat Enemies** – PvP non-alliance in state 161 and any cross-server invaders. \n"
         "💀>> **Units Lost** – Sacrifices during battles or rallies contribute here (plan wisely).\n"
         "💡 **Pro Tip** 💡: If you do not plan on participating **SHIELD** and send out trucks for Truck-4-Truck to rack up passive points.\n",
         ephemeral=False
@@ -385,7 +446,7 @@ async def slash_vs6(interaction: discord.Interaction):
         "🚚>> **S-tier Escort/Cargo Trucks** – Do S-tier for points. \n"
         "🕶>> **S-tier (orange) Shadow Calls Missions** – Prioritize orange missions for massive point boosts. \n"
         "⚙️>> **Speedups** – Troops, Construction and Research. Start saving if you can get away with it. \n"
-        "🎯>> **Defeat Enemies** – PvP in your state and any cross-server invaders. \n"
+        "🎯>> **Defeat Enemies** – PvP non-alliance in state 161 and any cross-server invaders. \n"
         "💀>> **Units Lost** – Sacrifices during battles or rallies contribute here (plan wisely).\n"
         "💡 **Pro Tip** 💡: If you do not plan on participating **SHIELD** and send out trucks for Truck-4-Truck to rack up passive points.\n",
         ephemeral=False
@@ -769,6 +830,100 @@ async def slash_teamup(interaction: discord.Interaction):
         ephemeral=True
     )
 
+@bot.tree.command(name="servertime", description="Show server time, UTC, and convert between zones.")
+@app_commands.describe(
+    time_str="Optional time to convert (HH:MM, 24h). Example: 02:00",
+    tz_from="Timezone your input time is in (default: SERVER)",
+    tz_to="Timezone to convert into (default: UTC)"
+)
+@app_commands.choices(
+    tz_from=[app_commands.Choice(name=k, value=k) for k in TZ_MAP.keys()],
+    tz_to=[app_commands.Choice(name=k, value=k) for k in TZ_MAP.keys()],
+)
+async def servertime(
+    interaction: discord.Interaction,
+    time_str: str | None = None,
+    tz_from: app_commands.Choice[str] | None = None,
+    tz_to: app_commands.Choice[str] | None = None,
+):
+    await interaction.response.defer(ephemeral=True)
+    now_utc = _now_utc().replace(second=0, microsecond=0)
+    now_srv_exact = _server_now_exact()
+    now_srv = now_srv_exact.replace(second=0, microsecond=0, tzinfo=_server_tzinfo())
+
+    next_reset_srv = _next_server_midnight(now_srv_exact)
+    until_reset = next_reset_srv - now_srv_exact
+    total_min = int(until_reset.total_seconds() // 60)
+    hours, minutes = divmod(total_min, 60)
+
+    if until_reset.total_seconds() <= 0:
+        reset_line = "🎉 **RESET NOW** — It’s 00:00 Server!"
+    elif until_reset <= datetime.timedelta(minutes=15):
+        reset_line = f"⚠️ **Reset in {minutes:02d}m** (00:00 Server)"
+    elif until_reset <= datetime.timedelta(hours=2):
+        reset_line = f"⏰ **Reset in {hours}h {minutes:02d}m** (00:00 Server)"
+    else:
+        reset_line = f"🕒 Next reset in {hours}h {minutes:02d}m (00:00 Server)"
+
+    rows = [
+        f"⏱️ **Dark War Server**: `{now_srv.strftime('%Y-%m-%d %H:%M')}` (UTC {SERVER_OFFSET_FROM_UTC:+d})",
+        f"🌐 UTC: `{now_utc.strftime('%Y-%m-%d %H:%M')}`",
+        reset_line,
+        "",
+        "**Other Zones (relative to Server right now):**",
+    ]
+
+    for label in TZ_MAP.keys():
+        if label in ("UTC", "SERVER"):
+            continue
+        tz = _tzinfo_for(label)
+        rows.append(f"• {label}: `{now_srv.astimezone(tz).strftime('%Y-%m-%d %H:%M')}`")
+
+    rows.append("")
+    rows.append("**Next Reset (00:00 Server) shown in each zone:**")
+    ordered = ["UTC", "SERVER"] + [k for k in TZ_MAP.keys() if k not in ("UTC", "SERVER")]
+    for label in ordered:
+        tz = _tzinfo_for(label)
+        local_at_reset = next_reset_srv.astimezone(tz)
+        rows.append(f"• {_display_label(label)}: `{local_at_reset.strftime('%Y-%m-%d %H:%M')}`")
+
+    message = "\n".join(rows)
+
+    if not time_str:
+        tip = "\n_Tip: convert a time, e.g._ `/servertime time_str:00:00 tz_from:SERVER tz_to:US/Eastern`"
+        await interaction.followup.send(message + tip, ephemeral=True)
+        return
+
+    src_label = tz_from.value if tz_from else "SERVER"
+    dst_label = tz_to.value if tz_to else "UTC"
+
+    try:
+        hh, mm = [int(x) for x in time_str.strip().split(":")]
+        assert 0 <= hh < 24 and 0 <= mm < 60
+    except Exception:
+        await interaction.followup.send("⚠️ Use `HH:MM` (24-hour). Example: `02:00`", ephemeral=True)
+        return
+
+    today_utc = now_utc.date()
+    if src_label == "SERVER":
+        src_dt = datetime.datetime(today_utc.year, today_utc.month, today_utc.day, hh, mm, tzinfo=_server_tzinfo())
+        src_utc = src_dt.astimezone(datetime.timezone.utc)
+    else:
+        src_dt = datetime.datetime(today_utc.year, today_utc.month, today_utc.day, hh, mm, tzinfo=_tzinfo_for(src_label))
+        src_utc = src_dt.astimezone(datetime.timezone.utc)
+
+    if dst_label == "SERVER":
+        dst_dt = src_utc.astimezone(_server_tzinfo())
+    else:
+        dst_dt = src_utc.astimezone(_tzinfo_for(dst_label))
+
+    conversion = f"\n**Convert**\n`{time_str} {src_label}` → `{dst_dt.strftime('%H:%M')}` {dst_label}"
+    await interaction.followup.send(message + conversion, ephemeral=True)
+
+
+@bot.tree.command(name="ranking", description="View YYMM Alliance rank structure and promotion criteria.")
+async def slash_ranking(interaction: discord.Interaction):
+    await interaction.response.send_message(
         "**:military_helmet: Alliance Rank Structure & Promotions**\n"
         "_All ranks are earned through strength, loyalty, contribution, and spirit._\n"
         "**Meritocracy-based. Effort and teamwork matter most.**\n\n"
@@ -906,16 +1061,14 @@ async def slash_helpme(interaction: discord.Interaction):
         "/powercores - Powercores, What are those!?\n"
         "/ranking - View Alliance rank structure.\n"
         "/teamup - How to Auto Join Rallies?\n"
+        "/servertime - See server time, UTC, and convert between zones\n"
         "/wti - Industrial Watchtower\n"
         "/v0 , /v1 , /v2 , /v3 , /v4 , /v5 , /v6 - V.S. Duel Daily Guides\n"
 	"/vsduel - All Daily breakout V.S. Duel guides.\n"
     )
 
-    # Show admin-only commands if user is in an allowed role
-    allowed_roles = os.getenv("ADMIN_ROLES", "R5 & R4,R5,R4,Admin,admin,R5/R4").split(",")
-    allowed_roles = [role.strip() for role in allowed_roles]
-
-    if any(role in role_names for role in allowed_roles):
+    # Show admin-only commands if user is R4 or R5
+    if any(role in role_names for role in ["R5 & R4", "R5", "R4", "Admin", "R5/R4"]):
         message += (
             "\n🛡️__**Admin Commands:**__\n"
             "/dm - To quickly get into others' DMs\n"
