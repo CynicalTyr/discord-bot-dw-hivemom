@@ -98,4 +98,10 @@ python dwbot.py
 ## 🛡️ Credits & Support
 
 Developed for the **Dark War: Survival** community.
-Special thanks to the **DWSI** team and my original State #161 for the original concept and idea. I have personally moved onto other projects but still happy to help if anyone has questions 
+Special thanks to the **DWSI** team and my original State #161 for the original concept and idea. I have personally moved onto other projects but still happy to help if anyone has questions
+
+## Coffee and energy fund
+
+If HiveMom ran the calendar so leadership did not have to, and you want more CynicalTyr builds, you can support the coffee and energy fund. Suggestion only.
+
+<a title="Donate with PayPal" href="https://www.paypal.me/ctmskm" target="_blank" rel="noopener"><img src="https://moosenet.lol/assets/images/paypal-logo.png" alt="PayPal" width="140" height="50" /></a><a title="Donate with CashApp" href="https://cash.app/$MooseMeNow" target="_blank" rel="noopener"><img src="https://moosenet.lol/assets/images/cashapp-logo.png" alt="Cash App" width="140" height="55" /></a> <a title="Donate with Venmo" href="https://venmo.com/MooseMeNow" target="_blank" rel="noopener"><img src="https://moosenet.lol/assets/images/venmo-logo-600x188.png" alt="Venmo" width="140" height="50" /></a>
