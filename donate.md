@@ -35,3 +35,5 @@ direct to **@MooseMeNow**
 - No ads, no tracking, no corporate nonsense.
 
 Thank you for your support.
+
+<a title="Donate with PayPal" href="https://www.paypal.me/ctmskm" target="_blank" rel="noopener"><img src="https://moosenet.lol/assets/images/paypal-logo.png" alt="PayPal" width="140" height="50" /></a><a title="Donate with CashApp" href="https://cash.app/$MooseMeNow" target="_blank" rel="noopener"><img src="https://moosenet.lol/assets/images/cashapp-logo.png" alt="Cash App" width="140" height="55" /></a> <a title="Donate with Venmo" href="https://venmo.com/MooseMeNow" target="_blank" rel="noopener"><img src="https://moosenet.lol/assets/images/venmo-logo-600x188.png" alt="Venmo" width="140" height="50" /></a>
